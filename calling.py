@@ -98,5 +98,32 @@ elif source_type == 'picamera':
     cap.configure(cap.create_video_configuration(main={"format" : 'XRGB888', "size":(resW,resH)}))
     cap.start()
 
+bbox_colors = [(164,120,87), (68,148,228), (93,97,209), (178,182,133), (88,159,106)]
+avg_frame_rate = 0 
+frame_rate_buffer = []
+img_count = 0 
+
+t_start = time.perf_counter
+if source_type == 'image' or source_type == 'folder':
+    if img_count >= len (imgs_list):
+        print('All images processed ')
+        sys.exit(0)
+    frame = cv2.imread(imgs_list[img_count])
+    img_count += 1
+elif source_type == 'vedio' or source_type == 'usb':
+    ret , frame = cap.red()
+    if not ret : break 
+
+# same thing but for pi camera 
+
+elif source_type == 'picamera' :
+    frame = cv2.cvtColor(cap.capture_array(), cv2.COLOR_BGRA2BGR)
+
+#resizing and run infrence 
+    if resize: frame = cv2. resize  (frame,resW , resH)
+    results = model (frame,verbose = False)
+    detections = results[0].boxes
+
+
 
 
