@@ -124,6 +124,27 @@ elif source_type == 'picamera' :
     results = model (frame,verbose = False)
     detections = results[0].boxes
 
+# Drawing the results 
+object_count = 0 
+
+for i in range (len(detections)):
+
+    xyxy = detections[i].xyxy.cpu().numpy().squeeze()
+    xmin,ymin,xmax,ymax = xyxy.astype(int)
+
+    classidx = int (detections[i].cls.item())
+    classname = labels[classidx]
+    conf = detections[i].conf.item()
+
+    if conf > float(min_thresh):
+        color = bbox_colors[classidx % len (bbox_colors)]
+        cv2.rectangle (frame,(xmin,ymin),(xmax,ymax),color,2)
+
+        label = f'{classname}: {int(conf*100)} %'
+        cv2.putText (frame, label, (xmin, ymin - 10 ), cv2.FONT_HERSHEY_SIMPLEX,0.5, color,2)
+        object_count +=1 
+        
+
 
 
 
