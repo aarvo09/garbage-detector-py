@@ -143,7 +143,30 @@ for i in range (len(detections)):
         label = f'{classname}: {int(conf*100)} %'
         cv2.putText (frame, label, (xmin, ymin - 10 ), cv2.FONT_HERSHEY_SIMPLEX,0.5, color,2)
         object_count +=1 
+# displaying fps and and cleanup 
+if source_type != 'image' and source_type != 'folder':
+    cv2.putText(frame,f'FPS :{avg_frame_rate:.2f}',(10,30),cv2.FONT_HERSHEY_SIMPLEX , 1 , (0,255,0),2)
+
+    cv2. imshow('YOLO Results', frame )
+    if record : recorder.write(frame)
+    
+    key = cv2.waitKey(1 if source_type in ['video', 'usb','picamera'] else 0 )
+    if key == ord ('q'): break 
+
+     #fps calculation
+
+    t_stop = time.perf_counter()
+    fps = 1/ (t_stop - t_start)
+    frame_rate_buffer.append(fps)
+    if len (frame_rate_buffer) > 200 : frame_rate_buffer.pop(0)
+    avg_frame_rate = np.mean(frame_rate_buffer)
+
+#cleanup 
+if 'cap' in locals (): cap.release()
+if record: recorder.release ()
+cv2.destroyAllWindow
         
+
 
 
 
