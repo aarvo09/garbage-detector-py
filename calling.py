@@ -51,3 +51,51 @@ else:
     print(f'Input{img_source} is invalid.try again or check the camera setup')
     sys.exit(0)
 
+# user specific display resolution 
+resize = False 
+if user_res:
+    resize = True 
+    resW, resH = int(user_res.split('x')[0]), int(user_res.split('x')[1])
+
+# checking for recording 
+if record :
+    if source_type not in ['video','usb']:
+        print("Recording only works for vedios and live camera ")
+        sys.exit(0)
+    if not user_res:
+        print("please specify the resolutin to record the vedio at .")
+        sys.exit(0)
+    
+    recording_name = input('enter the file name for recording ')
+    record_fps = 30 
+    recorder = cv2.VideoWriter(recording_name , cv2.VideoWriter_fourcc(*'MJPG'),record_fps,(resW,resH))
+# loading correcct input source 
+
+if source_type == 'image' :
+    imgs_list = [img_source]
+
+elif source_type == 'folder' :
+    imgs_list = []
+    filelist = glob.glob(img_source + '/*')
+    for file in filelist :
+        _, file_ext = os.path.splitext(file)
+        if file_ext in img_ext_list:
+            imgs_list.append(file)
+elif source_type == 'video' or source_type == 'usb':
+    if source_type == 'video': cap_arg = img_source
+    elif source_type == 'usb' : cap_arg = usb_idx
+    cap = cv2.VideoCapture(cap_arg)
+
+    if user_res:
+        cap.set(3,resW)
+        cap.set(4,resH)
+
+# handling rasberry pi camera 
+ 
+elif source_type == 'picamera':
+    from picamera2 import Picamera2
+    cap = Picamera2()
+    cap.configure(cap.create_video_configuration(main={"format" : 'XRGB888', "size":(resW,resH)}))
+    cap.start()
+
+
