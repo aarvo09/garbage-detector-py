@@ -1,10 +1,10 @@
-# Garbage Detection System using YOLOv8
+# Garbage Detection System using YOLOv11s
 
 A Python-based object detection system that uses YOLOv11s to identify and classify garbage in images and videos. This is an experimental project designed for learning and testing computer vision techniques.
 
 ## Features
 
-- Real-time garbage detection using YOLOv8 architecture
+- Real-time garbage detection using YOLOv11s architecture
 - Support for multiple input sources (images, videos, folders, USB camera, Raspberry Pi camera)
 - Adjustable confidence threshold for detections
 - Custom resolution settings for display and recording
@@ -15,11 +15,13 @@ A Python-based object detection system that uses YOLOv11s to identify and classi
 ## Project Structure
 
 ```
-moonshoot/
+garabage detection /
 ├── calling.py              # Main detection script
-├── best.pt                 # Trained YOLOv8 model weights (not included)
+├── best.pt                 # Trained YOLOv11s model weights (not included)
 ├── readme.md               # Project documentation
-└── env/                    # Virtual environment (excluded from repo)
+|── env/
+|__ my model.pt
+                   # Virtual environment (excluded from repo)
 ```
 
 ## Installation
